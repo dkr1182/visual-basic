@@ -1,0 +1,36 @@
+Function DKremer(sSentence As String, iPos As Integer, Optional iLen = 12)
+    Dim sSegments() As String
+    Dim iSegments As Integer
+    Dim sRest As String
+    Dim sTemp As String
+    Dim iSpace As Integer
+    Dim J As Integer
+
+    iSegments = 0
+    sRest = sSentence
+    sTemp = Left(sRest, iLen + 1)
+    Do Until Len(sTemp) <= iLen
+        iSpace = 0
+        For J = Len(sTemp) To 1 Step -1
+            If Mid(sTemp, J, 1) = " " And iSpace = 0 Then iSpace = J
+        Next J
+        If iSpace > 0 Then
+            sTemp = Left(sRest, iSpace - 1)
+            sRest = Mid(sRest, iSpace + 1)
+        Else
+            sRest = Mid(sRest, Len(sTemp) + 1)
+        End If
+        iSegments = iSegments + 1
+        ReDim Preserve sSegments(1 To iSegments)
+        sSegments(iSegments) = sTemp
+        sTemp = Left(sRest, iLen + 1)
+    Loop
+    iSegments = iSegments + 1
+    ReDim Preserve sSegments(1 To iSegments)
+    sSegments(iSegments) = sTemp
+    If iPos <= iSegments Then
+        DKremer = sSegments(iPos)
+    Else
+        DKremer = ""
+    End If
+End Function
